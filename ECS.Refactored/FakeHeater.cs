@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace ECS.Refactored
 {
-    class FakeHeater : IHeater
+    public class FakeHeater : IHeater
     {
         public void TurnOn()
         {
-            System.Console.WriteLine("Heater is on");
+            System.Console.WriteLine("ON");
         }
 
         public void TurnOff()
         {
-            System.Console.WriteLine("Heater is off");
+            System.Console.WriteLine("OFF");
         }
 
         public bool RunSelfTest()

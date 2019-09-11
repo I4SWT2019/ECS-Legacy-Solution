@@ -8,7 +8,7 @@ namespace ECS.Refactored
 {
     public class FakeTempSensor : ITempSensor
     {
-        public int _temp;
+        private readonly int _temp = 10;
 
         public int GetTemp()
         {

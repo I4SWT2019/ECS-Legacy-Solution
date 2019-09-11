@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECS.Refactored
 {
-    class ECS
+    public class ECS
     {
         private int _threshold;
         private readonly ITempSensor _tempSensor;
