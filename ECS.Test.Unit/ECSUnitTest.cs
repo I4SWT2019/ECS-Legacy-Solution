@@ -16,7 +16,6 @@ namespace ECS.Test.Unit
         {
             int thresholdTemp = 20;
             _uut = new Refactored.ECS(thresholdTemp, new FakeTempSensor(), new FakeHeater());
-            
         }
 
         [Test]
