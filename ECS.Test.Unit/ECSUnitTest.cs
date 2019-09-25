@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ECS.Refactored;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace ECS.Test.Unit
@@ -14,25 +15,44 @@ namespace ECS.Test.Unit
         [SetUp]
         public void Setup()
         {
-            int thresholdTemp = 20;
-            FakeTempSensor _fakeTempSensor = new FakeTempSensor();
-            FakeHeater _fakeHeater = new FakeHeater();
-            _uut = new Refactored.ECS(thresholdTemp, _fakeTempSensor, _fakeHeater);
+            int thresholdUpperTemp = 20;
+            int thresholdLowerTemp = 10;
+            var _fakeTempSensor = Substitute.For<ITempSensor>();
+            var _fakeHeater = Substitute.For<IHeater>();
+            var _fakeWindow = Substitute.For<IWindow>();
+            _uut = new Refactored.ECS(thresholdUpperTemp, thresholdLowerTemp,
+                _fakeTempSensor, _fakeHeater, _fakeWindow);
         }
 
         [Test]
-        public void GetThreshold_Is20_Returns20()
+        public void GetUpperThreshold_Is20_Returns20()
         {
-            Assert.That(_uut.GetThreshold(), Is.EqualTo(20));
+            Assert.That(_uut.GetUpperThreshold(), Is.EqualTo(20));
+        }
+
+        [Test]
+        public void GetLowerThreshold_Is20_Returns20()
+        {
+            Assert.That(_uut.GetLowerThreshold(), Is.EqualTo(10));
+        }
+
+
+        [TestCase(-20, -20)]
+        [TestCase(0, 0)]
+        [TestCase(15, 15)]
+        public void SetUpperThreshold_SetAboveZeroAtZeroBelowZero_ResultIsCorrect(int threshold, int result)
+        {
+            _uut.SetUpperThreshold(threshold);
+            Assert.That(_uut.GetUpperThreshold(),Is.EqualTo(result));
         }
 
         [TestCase(-20, -20)]
         [TestCase(0, 0)]
         [TestCase(15, 15)]
-        public void SetThreshold_SetAboveZeroAtZeroBelowZero_ResultIsCorrect(int threshold, int result)
+        public void SetLowerThreshold_SetAboveZeroAtZeroBelowZero_ResultIsCorrect(int threshold, int result)
         {
-            _uut.SetThreshold(threshold);
-            Assert.That(_uut.GetThreshold(),Is.EqualTo(result));
+            _uut.SetLowerThreshold(threshold);
+            Assert.That(_uut.GetLowerThreshold(), Is.EqualTo(result));
         }
 
         [Test]
