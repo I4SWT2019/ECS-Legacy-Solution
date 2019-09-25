@@ -74,9 +74,6 @@ namespace ECS.Test.Unit
             Assert.IsTrue(_uut.RunSelfTest());
         }
 
-            _uut.RunSelfTest().Returns(true);
-            _uut.Received(1);
-        }
 
         [Test]
         public void RunSelfTest_TempSensorFails_SelfTestFails()
