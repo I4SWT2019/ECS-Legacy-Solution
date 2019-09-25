@@ -74,6 +74,38 @@ namespace ECS.Test.Unit
             Assert.IsTrue(_uut.RunSelfTest());
         }
 
+            _uut.RunSelfTest().Returns(true);
+            _uut.Received(1);
+        }
+
+        [Test]
+        public void RunSelfTest_TempSensorFails_SelfTestFails()
+        {
+            _tempSensor.RunSelfTest().Returns(false);
+            _heater.RunSelfTest().Returns(true);  
+            _window.RunSelfTest().Returns(true);
+
+            Assert.IsFalse(_uut.RunSelfTest());
+        }
+
+        [Test]
+        public void RunSelfTest_HeaterFails_SelfTestFails()
+        {
+            _tempSensor.RunSelfTest().Returns(true);
+            _heater.RunSelfTest().Returns(false);
+            _window.RunSelfTest().Returns(true);
+
+            Assert.IsFalse(_uut.RunSelfTest());
+        }
+
+        [Test]
+        public void RunSelfTest_WindowFails_SelfTestFails()
+        {
+            _tempSensor.RunSelfTest().Returns(true);
+            _heater.RunSelfTest().Returns(true);
+            _window.RunSelfTest().Returns(false);
+
+            Assert.IsFalse(_uut.RunSelfTest());
+        }
     }
 }
-
