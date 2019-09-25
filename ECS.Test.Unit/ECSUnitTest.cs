@@ -58,13 +58,16 @@ namespace ECS.Test.Unit
         [Test]
         public void GetCurTemp_TempIs10_Return10()
         {
-            Assert.That(_uut.GetCurTemp(),Is.EqualTo(10));
+            _uut.GetCurTemp().Returns(10);
+            _uut.Received(10);
         }
 
         [Test]
         public void RunSelfTest_TestIsOK_ReturnTrue()
         {
-            Assert.That(_uut.RunSelfTest(),Is.True);
+
+            _uut.RunSelfTest().Returns(true);
+            _uut.Received(1);
         }
 
         [Test]
