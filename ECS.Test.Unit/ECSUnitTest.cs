@@ -46,7 +46,7 @@ namespace ECS.Test.Unit
         public void SetUpperThreshold_SetAboveZeroAtZeroBelowZero_ResultIsCorrect(int threshold, int result)
         {
             _uut.SetUpperThreshold(threshold);
-            Assert.That(_uut.GetUpperThreshold(),Is.EqualTo(result));
+            Assert.That(_uut.GetUpperThreshold(), Is.EqualTo(result));
         }
 
         [TestCase(-20, -20)]
@@ -61,18 +61,19 @@ namespace ECS.Test.Unit
         [Test]
         public void GetCurTemp_TempIs10_Return10()
         {
-            _uut.GetCurTemp().Returns(10);
-            _uut.Received(10);
+            _tempSensor.GetTemp().Returns(10);
+            Assert.That(_uut.GetCurTemp(), Is.EqualTo(10));
         }
 
         [Test]
         public void RunSelfTest_TestIsOK_ReturnTrue()
         {
-
-            _uut.RunSelfTest().Returns(true);
-            _uut.Received(1);
-        }
-
+            _tempSensor.RunSelfTest().Returns(true);
+            _heater.RunSelfTest().Returns(true);
+            _window.RunSelfTest().Returns(true);
             Assert.IsTrue(_uut.RunSelfTest());
         }
+
+    }
+}
 
