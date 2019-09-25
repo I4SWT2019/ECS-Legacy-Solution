@@ -11,17 +11,20 @@ namespace ECS.Test.Unit
     public class ECSUnitTest
     {
         private Refactored.ECS _uut;
+        private ITempSensor _tempSensor;
+        private IHeater _heater;
+        private IWindow _window;
 
         [SetUp]
         public void Setup()
         {
             int thresholdUpperTemp = 20;
             int thresholdLowerTemp = 10;
-            var _fakeTempSensor = Substitute.For<ITempSensor>();
-            var _fakeHeater = Substitute.For<IHeater>();
-            var _fakeWindow = Substitute.For<IWindow>();
+            _tempSensor = Substitute.For<ITempSensor>();
+            _heater = Substitute.For<IHeater>();
+            _window = Substitute.For<IWindow>();
             _uut = new Refactored.ECS(thresholdUpperTemp, thresholdLowerTemp,
-                _fakeTempSensor, _fakeHeater, _fakeWindow);
+                _tempSensor, _heater, _window);
         }
 
         [Test]
@@ -64,66 +67,6 @@ namespace ECS.Test.Unit
         [Test]
         public void RunSelfTest_TestIsOK_ReturnTrue()
         {
-            Assert.That(_uut.RunSelfTest(),Is.True);
+
+            Assert.IsTrue(_uut.RunSelfTest());
         }
-
-        [Test]
-        public void Regulate_TempIs10ThresholdIs20_ReturnsTrue()
-        {
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                _uut.Regulate();
-
-                string expected = string.Format("ON{0}",Environment.NewLine);
-
-                // Resetting console output
-                StreamWriter standardOut = new StreamWriter(Console.OpenStandardOutput());
-                standardOut.AutoFlush = true;
-                Console.SetOut(standardOut);
-
-                Assert.That(expected, Is.EqualTo(sw.ToString()));
-            }
-        }
-
-        [Test]
-        public void Regulate_TempIs10ThresholdIs5_ReturnsTrue()
-        {
-            _uut.SetThreshold(5);
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                _uut.Regulate();
-
-                string expected = string.Format("OFF{0}", Environment.NewLine);
-
-                // Resetting console output
-                StreamWriter standardOut = new StreamWriter(Console.OpenStandardOutput());
-                standardOut.AutoFlush = true;
-                Console.SetOut(standardOut);
-
-                Assert.That(expected, Is.EqualTo(sw.ToString()));
-            }
-        }
-
-        [Test]
-        public void Regulate_TempIs10ThresholdIs10_ReturnsTrue()
-        {
-            _uut.SetThreshold(10);
-            using (StringWriter sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                _uut.Regulate();
-
-                string expected = string.Format("OFF{0}", Environment.NewLine);
-
-                // Resetting console output
-                StreamWriter standardOut = new StreamWriter(Console.OpenStandardOutput());
-                standardOut.AutoFlush = true;
-                Console.SetOut(standardOut);
-
-                Assert.That(expected, Is.EqualTo(sw.ToString()));
-            }
-        }
-    }
-}
