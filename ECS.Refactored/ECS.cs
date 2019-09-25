@@ -9,7 +9,7 @@ namespace ECS.Refactored
     public class ECS
     {
         private int _thresholdUpper;
-        private int _threshouldLower;
+        private int _thresholdLower;
         private readonly ITempSensor _tempSensor;
         private readonly IHeater _heater;
         private readonly IWindow _window;
@@ -26,10 +26,21 @@ namespace ECS.Refactored
         public void Regulate()
         {
             var t = _tempSensor.GetTemp();
-            if (t < _thresholdUpper)
+            if (t < _thresholdLower)
+            {
                 _heater.TurnOn();
-            else
+                _window.Close();
+            }
+            else if (t > _thresholdUpper)
+            {
                 _heater.TurnOff();
+                _window.Open();
+            }
+            else
+            {
+                _heater.TurnOff();
+                _window.Close();
+            }
 
         }
 
@@ -40,7 +51,7 @@ namespace ECS.Refactored
 
         public void SetLowerThreshold(int thr)
         {
-            _threshouldLower = thr;
+            _thresholdLower = thr;
         }
 
         public int GetUpperThreshold()
@@ -50,7 +61,7 @@ namespace ECS.Refactored
 
         public int GetLowerThreshold()
         {
-            return _threshouldLower;
+            return _thresholdLower;
         }
 
         public int GetCurTemp()
@@ -60,7 +71,7 @@ namespace ECS.Refactored
 
         public bool RunSelfTest()
         {
-            return _tempSensor.RunSelfTest() && _heater.RunSelfTest();
+            return _tempSensor.RunSelfTest() && _heater.RunSelfTest() && _window.RunSelfTest();
         }
     }
 }

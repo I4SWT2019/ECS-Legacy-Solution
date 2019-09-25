@@ -70,3 +70,4 @@ namespace ECS.Test.Unit
 
             Assert.IsTrue(_uut.RunSelfTest());
         }
+
